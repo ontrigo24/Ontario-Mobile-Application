@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Correct import for flutter_svg package
 import 'package:ontrigo/utils/global_variables.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,22 +12,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool loading = true;
+  void checkAuth() async {
+    Timer(
+      const Duration(seconds: 3),
+      () async {
+        setState(() {
+          loading = false;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: GlobalVariables.colors.background, // Ensure GlobalVariables.colors.background is a valid property
+      backgroundColor: GlobalVariables.colors.background,
       body: Center(
-        child: Column(
-          children: [
-            Image.asset('assets/icons/full_logo.svg'),
-            SvgPicture.asset(
-              'assets/icons/full_logo.svg', 
-              semanticsLabel: 'Ontrigo Logo',
-            ),
-            Text('helo world')
-          ],
-        ),
+        child: Image.asset('assets/icons/full_logo.png'),
       ),
     );
   }
