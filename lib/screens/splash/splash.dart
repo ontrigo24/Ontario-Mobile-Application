@@ -26,11 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    checkAuth();
     return Scaffold(
       backgroundColor: GlobalVariables.colors.background,
-      body: Center(
-        child: Image.asset('assets/icons/full_logo.png'),
-      ),
+      body: loading
+          ? Center(
+              child: Image.asset('assets/icons/full_logo.png'),
+            )
+          : Container(),
     );
   }
 }
