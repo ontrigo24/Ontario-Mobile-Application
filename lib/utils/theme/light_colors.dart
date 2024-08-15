@@ -81,4 +81,10 @@ class LightColors extends AppColorScheme {
   
   @override
   Color get textSecondary => const Color(0x00141414);
+  
+  @override
+  Color get textPrimary => const Color(0xFF141414);
+  
+  @override
+  Color get textAltPrimary => background;
 }
