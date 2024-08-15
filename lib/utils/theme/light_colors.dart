@@ -5,9 +5,9 @@ import 'app_color_scheme.dart';
 
 class LightColors extends AppColorScheme {
   @override
-  Color get primary => const Color(0xF66D1F);
+  Color get primary => const Color(0xFFF8F8F8);
   @override
-  Color get secondary => Colors.white;
+  Color get secondary => const Color(0xFFF66E1F);
   @override
   Color get chatBubble => const Color(0xffFBE6BD);
   @override
@@ -27,9 +27,9 @@ class LightColors extends AppColorScheme {
   @override
   Color get inputFieldHint => const Color(0xFF9E9E9E);
   @override
-  Color get inputFieldFocusedBorder => const Color.fromARGB(255, 236, 135, 53);
+  Color get inputFieldFocusedBorder => const Color(0xFFEC8735);
   @override
-  Color get inputFieldEnabledBorder => const Color.fromARGB(255, 236, 135, 53);
+  Color get inputFieldEnabledBorder => const Color(0xFFEC8735);
   @override
   Color get messageText => Colors.black;
   @override
