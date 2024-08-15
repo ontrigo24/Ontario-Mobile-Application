@@ -28,5 +28,7 @@ abstract class AppColorScheme {
   LinearGradient get errorGradient;
 
   // Text color
+  Color get textPrimary;
   Color get textSecondary;
+  Color get textAltPrimary;
 }

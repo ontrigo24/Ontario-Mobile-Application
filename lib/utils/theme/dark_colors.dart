@@ -73,4 +73,11 @@ class DarkColors extends AppColorScheme {
   @override
   // TODO: implement textSecondary
   Color get textSecondary => throw UnimplementedError();
+  
+  @override
+  // TODO: implement textPrimary
+  Color get textPrimary => throw UnimplementedError();
+  
+  @override
+  Color get textAltPrimary => background;
 }
