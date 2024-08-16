@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ontrigo/screens/auth/components/login.dart';
+import 'package:ontrigo/screens/auth/components/sign_in.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String routeName = '/auth';
@@ -12,6 +12,6 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
-    return const LoginScreen();
+    return const SignInScreen();
   }
 }
