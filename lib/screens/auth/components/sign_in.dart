@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ontrigo/screens/auth/components/sign_up.dart';
 import 'package:ontrigo/utils/global_variables.dart';
 import 'package:ontrigo/utils/screen_size.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+import '../../../components/primary_btn.dart';
+
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +36,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Text('Please fill your information'),
+                Text('Please fill your credentials'),
               ],
             ),
-            const SizedBox(
-                    height: 16.0), 
+            const SizedBox(height: 16.0),
             Column(
               children: [
                 Padding(
@@ -132,7 +134,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              // Handle SignUp tap
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                  builder: (_) => const SignUpScreen()));
                             },
                             child: Text(
                               "Sign Up",
@@ -159,62 +162,33 @@ class LoginScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-                    height: 16.0), 
-            SizedBox(
-              width: ScreenSizeConfig.screenWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: ScreenSizeConfig.screenHeight * 0.018),
-                        width: ScreenSizeConfig.screenWidth -
-                            (ScreenSizeConfig.screenWidth * 0.18),
-                        height: ScreenSizeConfig.screenHeight * 0.06,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: GlobalVariables.colors.secondary),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100))),
-                        child: Text(
-                          'Sign In',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: GlobalVariables.colors.secondary,
-                          ),
-                        )),
-                  )
-                ],
-              ),
-            ),
+            const SizedBox(height: 16.0),
+            PrimaryButton(onPressed: () {}, title: 'Sign In'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: ScreenSizeConfig.screenWidth * 0.08,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.5,
-                      color: const Color(0xFFA2A2A2),
-                    )
-                  ),
+                      border: Border.all(
+                    width: 0.5,
+                    color: const Color(0xFFA2A2A2),
+                  )),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Text('OR', style: TextStyle(fontWeight: FontWeight.bold),),
+                  child: Text(
+                    'OR',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Container(
                   width: ScreenSizeConfig.screenWidth * 0.08,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.5,
-                      color: const Color(0xFFA2A2A2),
-                    )
-                  ),
+                      border: Border.all(
+                    width: 0.5,
+                    color: const Color(0xFFA2A2A2),
+                  )),
                 )
               ],
             ),

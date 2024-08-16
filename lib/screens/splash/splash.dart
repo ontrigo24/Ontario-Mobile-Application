@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:ontrigo/components/primary_btn.dart';
 import 'package:ontrigo/screens/auth/auth_page.dart';
 import 'package:ontrigo/utils/global_variables.dart';
 
@@ -63,9 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
   ];
 
   void handleNextBtn() {
-    Navigator.pushReplacementNamed(
-      context, AuthScreen.routeName
-    );
+    Navigator.pushReplacementNamed(context, AuthScreen.routeName);
   }
 
   @override
@@ -232,8 +231,9 @@ class _SplashScreenState extends State<SplashScreen> {
                               value: isActive ? progress : 0.0,
                               backgroundColor:
                                   const Color.fromARGB(123, 224, 224, 224),
-                              color:
-                                  isActive ? GlobalVariables.colors.background : Colors.transparent,
+                              color: isActive
+                                  ? GlobalVariables.colors.background
+                                  : Colors.transparent,
                             ),
                           ),
                         );
@@ -247,31 +247,40 @@ class _SplashScreenState extends State<SplashScreen> {
                   right: 0,
                   child: SizedBox(
                     width: size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: handleNextBtn,
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.018),
-                              width: size.width - (size.width * 0.18),
-                              height: size.height * 0.06,
-                              decoration: BoxDecoration(
-                                  color: GlobalVariables.colors.background,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(100))),
-                              child: Text(
-                                'Next',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: GlobalVariables.colors.textPrimary,
-                                ),
-                              )),
-                        )
-                      ],
-                    ),
+                    child: PrimaryButton(
+                        title: 'Next',
+                        titleStyle: TextStyle(
+                            color: GlobalVariables.colors.textPrimary),
+                        showBorder: false,
+                        fillColor: GlobalVariables.colors.background,
+                        onPressed: () {
+                          Navigator.pushNamed(context, AuthScreen.routeName);
+                        }),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     GestureDetector(
+                    //       onTap: handleNextBtn,
+                    //       child: Container(
+                    //           padding: EdgeInsets.symmetric(
+                    //               vertical: size.height * 0.018),
+                    //           width: size.width - (size.width * 0.18),
+                    //           height: size.height * 0.06,
+                    //           decoration: BoxDecoration(
+                    //               color: GlobalVariables.colors.background,
+                    //               borderRadius: const BorderRadius.all(
+                    //                   Radius.circular(100))),
+                    //           child: Text(
+                    //             'Next',
+                    //             textAlign: TextAlign.center,
+                    //             style: TextStyle(
+                    //               color: GlobalVariables.colors.textPrimary,
+                    //             ),
+                    //           )),
+                    //     )
+                    //   ],
+                    // ),
                   ),
                 ),
               ],

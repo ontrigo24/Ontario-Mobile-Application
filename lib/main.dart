@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'OntriGo',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: GlobalVariables.colors.primary),
+            colorScheme: ColorScheme.fromSeed(seedColor: GlobalVariables.colors.secondary),
             useMaterial3: true,
           ),
           onGenerateRoute: (routeSettings) => onGenerateRoute(routeSettings),
