@@ -72,7 +72,7 @@ class SignInScreen extends StatelessWidget {
                     height: 16.0), // Space between text fields and RichText
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: ScreenSizeConfig.screenWidth * 0.095),
+                      horizontal: ScreenSizeConfig.screenWidth * 0.08),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -82,7 +82,7 @@ class SignInScreen extends StatelessWidget {
                             "Don’t Have an Account? ",
                             style: TextStyle(
                                 fontSize:
-                                    ScreenSizeConfig.screenHeight * 0.015),
+                                    ScreenSizeConfig.screenHeight * 0.013),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -93,13 +93,14 @@ class SignInScreen extends StatelessWidget {
                             child: Text(
                               "Sign Up",
                               style: TextStyle(
-                                fontSize: ScreenSizeConfig.screenHeight * 0.015,
+                                fontSize: ScreenSizeConfig.screenHeight * 0.013,
                                 color: GlobalVariables.colors.secondary,
                               ),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(width: ScreenSizeConfig.screenWidth * 0.045),
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPassword()));
@@ -107,7 +108,7 @@ class SignInScreen extends StatelessWidget {
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(
-                              fontSize: ScreenSizeConfig.screenHeight * 0.015),
+                              fontSize: ScreenSizeConfig.screenHeight * 0.013),
                         ),
                       ),
                     ],
