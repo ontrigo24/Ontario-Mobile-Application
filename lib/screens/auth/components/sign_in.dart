@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ontrigo/screens/auth/components/forgot_password.dart';
 import 'package:ontrigo/screens/auth/components/sign_up.dart';
 import 'package:ontrigo/utils/global_variables.dart';
 import 'package:ontrigo/utils/screen_size.dart';
 
+import '../../../components/custom_onboarding_text_field.dart';
 import '../../../components/primary_btn.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -42,85 +44,35 @@ class SignInScreen extends StatelessWidget {
             const SizedBox(height: 16.0),
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: GlobalVariables.colors.inputFieldEnabledBorder,
-                          width: 1.0),
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24)),
-                    ),
-                    child: Align(
-                      alignment: const Alignment(0, 0.2),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: SvgPicture.asset(
-                              'assets/icons/mail.svg',
-                            ),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                      ),
-                    ),
+                const CustomOnboardingTextField(
+                  labelText: 'Email',
+                  controller: null,
+                  sufixSvgIconPath: 'assets/icons/mail.svg',
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
                   ),
                 ),
                 const SizedBox(height: 4.0), // Space between text fields
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: GlobalVariables.colors.inputFieldEnabledBorder,
-                          width: 1.0),
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24),
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                    ),
-                    child: Align(
-                      alignment: const Alignment(2, 0.2),
-                      child: TextFormField(
-                        obscureText: true, // To hide the password input
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: SvgPicture.asset(
-                              'assets/icons/Lock.svg',
-                            ),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                      ),
-                    ),
+                const CustomOnboardingTextField(
+                  labelText: 'Password',
+                  controller: null,
+                  obscureText: true,
+                  sufixSvgIconPath: 'assets/icons/Lock.svg',
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
                   ),
                 ),
                 const SizedBox(
                     height: 16.0), // Space between text fields and RichText
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: ScreenSizeConfig.screenWidth * 0.095),
+                      horizontal: ScreenSizeConfig.screenWidth * 0.08),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -130,31 +82,33 @@ class SignInScreen extends StatelessWidget {
                             "Don’t Have an Account? ",
                             style: TextStyle(
                                 fontSize:
-                                    ScreenSizeConfig.screenHeight * 0.015),
+                                    ScreenSizeConfig.screenHeight * 0.013),
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                  builder: (_) => const SignUpScreen()));
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignUpScreen()));
                             },
                             child: Text(
                               "Sign Up",
                               style: TextStyle(
-                                fontSize: ScreenSizeConfig.screenHeight * 0.015,
+                                fontSize: ScreenSizeConfig.screenHeight * 0.013,
                                 color: GlobalVariables.colors.secondary,
                               ),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(width: ScreenSizeConfig.screenWidth * 0.045),
                       GestureDetector(
                         onTap: () {
-                          // Handle SignUp tap
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPassword()));
                         },
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(
-                              fontSize: ScreenSizeConfig.screenHeight * 0.015),
+                              fontSize: ScreenSizeConfig.screenHeight * 0.013),
                         ),
                       ),
                     ],
@@ -207,3 +161,4 @@ class SignInScreen extends StatelessWidget {
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ontrigo/screens/auth/components/sign_up_form.dart';
 
 import '../../../components/primary_btn.dart';
 import '../../../utils/global_variables.dart';
@@ -9,6 +10,7 @@ class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
@@ -87,7 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             PrimaryButton(
               onPressed: () {
                 // Handle the "Next" button action based on the selected option
-                print('Selected Sign Up Option: $_selectedOption');
+                debugPrint('Selected Sign Up Option: $_selectedOption');
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (_) => const SignUpForm()));
               },
               title: 'Next',
             ),
@@ -119,7 +123,9 @@ class CustomOnboardingRadioBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: ScreenSizeConfig.screenHeight * 0.12,
-      margin: EdgeInsets.symmetric(horizontal: ScreenSizeConfig.screenWidth * 0.04, vertical: ScreenSizeConfig.screenWidth * 0.012),
+      margin: EdgeInsets.symmetric(
+          horizontal: ScreenSizeConfig.screenWidth * 0.04,
+          vertical: ScreenSizeConfig.screenWidth * 0.012),
       padding: EdgeInsets.all(ScreenSizeConfig.screenWidth * 0.04),
       decoration: groupValue == value
           ? BoxDecoration(
@@ -130,7 +136,7 @@ class CustomOnboardingRadioBtn extends StatelessWidget {
               ),
             )
           : BoxDecoration(
-              color: const Color.fromARGB(255, 240, 240, 240),
+              color: const Color.fromARGB(255, 244, 244, 244),
               borderRadius: BorderRadius.all(
                 Radius.circular(ScreenSizeConfig.screenHeight * 0.2),
               ),
@@ -161,11 +167,19 @@ class CustomOnboardingRadioBtn extends StatelessWidget {
                     ? GlobalVariables.colors.textAltPrimary
                     : GlobalVariables.colors.textPrimary,
               )),
-          trailing: Radio<String>(
-              activeColor: GlobalVariables.colors.secondary,
-              value: value,
-              groupValue: groupValue,
-              onChanged: onChange),
+          trailing: Container(
+            decoration: BoxDecoration(
+                color: groupValue == value
+                    ? GlobalVariables.colors.secondary.withOpacity(0.2)
+                    : Colors.transparent,
+                borderRadius:
+                    BorderRadius.circular(ScreenSizeConfig.screenHeight)),
+            child: Radio<String>(
+                activeColor: GlobalVariables.colors.secondary,
+                value: value,
+                groupValue: groupValue,
+                onChanged: onChange),
+          ),
         ),
       ),
     );
