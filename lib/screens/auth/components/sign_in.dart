@@ -9,7 +9,13 @@ import '../../../components/custom_onboarding_text_field.dart';
 import '../../../components/primary_btn.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+  const SignInScreen(
+      {super.key,
+      required this.emailController,
+      required this.passwordController, required this.onSubmit});
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +50,11 @@ class SignInScreen extends StatelessWidget {
             const SizedBox(height: 16.0),
             Column(
               children: [
-                const CustomOnboardingTextField(
+                CustomOnboardingTextField(
                   labelText: 'Email',
-                  controller: null,
+                  controller: emailController,
                   sufixSvgIconPath: 'assets/icons/mail.svg',
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(8),
                     bottomRight: Radius.circular(8),
                     topLeft: Radius.circular(24),
@@ -56,12 +62,12 @@ class SignInScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4.0), // Space between text fields
-                const CustomOnboardingTextField(
+                CustomOnboardingTextField(
                   labelText: 'Password',
-                  controller: null,
+                  controller: passwordController,
                   obscureText: true,
                   sufixSvgIconPath: 'assets/icons/Lock.svg',
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                     topLeft: Radius.circular(8),
@@ -86,9 +92,8 @@ class SignInScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => const SignUpScreen()));
                             },
                             child: Text(
                               "Sign Up",
@@ -103,7 +108,8 @@ class SignInScreen extends StatelessWidget {
                       SizedBox(width: ScreenSizeConfig.screenWidth * 0.045),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPassword()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => const ForgotPassword()));
                         },
                         child: Text(
                           "Forgot Password?",
@@ -117,7 +123,7 @@ class SignInScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            PrimaryButton(onPressed: () {}, title: 'Sign In'),
+            PrimaryButton(onPressed: onSubmit, title: 'Sign In'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -161,4 +167,3 @@ class SignInScreen extends StatelessWidget {
     );
   }
 }
-

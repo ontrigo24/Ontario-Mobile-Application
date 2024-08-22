@@ -41,6 +41,12 @@ dependencies:
   flutter_svg: ^2.0.10+1
   carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.2.0+3
+  provider: ^6.1.2
+  share_plus: ^10.0.2
+  shared_preferences: ^2.3.2
+  firebase_auth: ^4.16.0
+  google_sign_in: ^6.2.1
+  firebase_core: ^2.24.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ontrigo/API/controller/auth.controller.dart';
 import 'package:ontrigo/screens/auth/components/sign_up_form.dart';
 
 import '../../../components/primary_btn.dart';
@@ -15,7 +16,29 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final AuthController _authController = AuthController();
   String _selectedOption = 'Email & Password';
+
+  void handleOnSubmit() async {
+    // Handle the "Next" button action based on the selected option
+    debugPrint('Selected Sign Up Option: $_selectedOption');
+    switch (_selectedOption) {
+      case 'Email & Password':
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const SignUpForm()));
+        break;
+      case 'Google':
+        var response = await _authController.signInWithGoogle(context);
+        print(response);
+        break;
+      case 'Facebook':
+        debugPrint('Facebook is yet to be implemented');
+
+        break;
+      default:
+        debugPrint('Invalid option selected');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             const SizedBox(height: 8.0),
             PrimaryButton(
-              onPressed: () {
-                // Handle the "Next" button action based on the selected option
-                debugPrint('Selected Sign Up Option: $_selectedOption');
-                Navigator.of(context)
-                    .pushReplacement(MaterialPageRoute(builder: (_) => const SignUpForm()));
-              },
+              onPressed: handleOnSubmit,
               title: 'Next',
             ),
             SizedBox(height: ScreenSizeConfig.screenHeight * 0.075),
