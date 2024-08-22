@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "202651502864",
+    "project_id": "ontrigo-6c2b8",
+    "storage_bucket": "ontrigo-6c2b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202651502864:android:6ea632ec49175c55833d95",
+        "android_client_info": {
+          "package_name": "com.ontrigo.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202651502864-ts8p9sv0ii2hpe5ui7vqherdo2mg7hh1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Ed-eTlW2D0efkyuGvGbi4yOzHM6WmhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202651502864-ts8p9sv0ii2hpe5ui7vqherdo2mg7hh1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

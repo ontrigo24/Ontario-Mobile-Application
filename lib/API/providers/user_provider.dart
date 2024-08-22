@@ -7,7 +7,7 @@ class UserProvider extends ChangeNotifier {
 
   UserData? get userData => _userData;
 
-  Future<User?> signIn(
+  Future<UserClass?> signIn(
       BuildContext context, Map<String, dynamic> payload) async {
     try {
       final response = await AuthController().signIn(context, payload);

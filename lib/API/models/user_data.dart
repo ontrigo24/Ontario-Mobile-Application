@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class UserData {
     int? statusCode;
-    User? data;
+    UserClass? data;
     String? message;
     bool? success;
 
@@ -19,7 +19,7 @@ class UserData {
 
     factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         statusCode: json["statusCode"],
-        data: json["data"] == null ? null : User.fromJson(json["data"]),
+        data: json["data"] == null ? null : UserClass.fromJson(json["data"]),
         message: json["message"],
         success: json["success"],
     );
@@ -32,7 +32,7 @@ class UserData {
     };
 }
 
-class User {
+class UserClass {
     String? id;
     String? email;
     String? firstName;
@@ -46,7 +46,7 @@ class User {
     int? v;
     String? token;
 
-    User({
+    UserClass({
         this.id,
         this.email,
         this.firstName,
@@ -61,11 +61,11 @@ class User {
         this.token,
     });
 
-    factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+    factory UserClass.fromRawJson(String str) => UserClass.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
+    factory UserClass.fromJson(Map<String, dynamic> json) => UserClass(
         id: json["_id"],
         email: json["email"],
         firstName: json["firstName"],

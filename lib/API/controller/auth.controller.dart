@@ -1,67 +1,72 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/user_data.dart';
 import '../services/api_client.dart';
 import '../services/helper/api_error.dart';
 import '../services/helper/api_error_handler.dart';
 
+/// Controller class responsible for handling authentication logic.
 class AuthController {
-  var client = http.Client();
+  // HTTP client for making API requests
+  final http.Client client = http.Client();
 
+  /// Signs in the user using the provided authentication payload.
+  ///
+  /// The [context] is used for displaying error messages through [ScaffoldMessenger].
+  /// The [payload] contains authentication data such as the provider and token.
+  /// Returns a [UserData] object if authentication is successful, otherwise returns `null`.
   Future<UserData?> signIn(BuildContext context, Map<String, dynamic> payload) async {
     debugPrint('Authenticating data with payload: $payload');
     final String requestBody = json.encode(payload);
 
     try {
-      // Make the POST request
-      final response = await http.post(
+      // Make the POST request to the sign-in endpoint
+      final response = await client.post(
         Uri.parse('$baseUrl/auth/signin'),
         body: requestBody,
         headers: {
           'Content-Type': 'application/json',
         },
-        // Optionally handle redirect by manually inspecting headers
       );
 
-      // Debug print response status and body
       debugPrint('Response Status Code: ${response.statusCode}');
       debugPrint('Response Body: ${response.body}');
-      debugPrint('Response Headers: ${response.headers}');
 
-      // Handle redirect if needed
+      // Handle potential HTTP 308 redirect status
       if (response.statusCode == 308) {
         final redirectUrl = response.headers['location'];
         if (redirectUrl != null) {
           debugPrint('Redirecting to: $redirectUrl');
-          // Optionally make a new request to the redirect URL
-          // var newResponse = await http.get(Uri.parse(redirectUrl));
-          // Handle new response if necessary
         }
       }
 
-      // Check if the response has a successful status code
+      // Process a successful response
       if (response.statusCode == 200) {
-        var responseData = json.decode(response.body);
+        final responseData = json.decode(response.body);
 
+        // Extract and return user data if available
         if (responseData.containsKey('data')) {
-          Map<String, dynamic> userData = responseData['data'];
+          final Map<String, dynamic> userData = responseData['data'];
 
           return UserData(
             statusCode: responseData['statusCode'],
             message: responseData['message'],
-            data: User.fromJson(userData),
+            data: UserClass.fromJson(userData),
             success: responseData['success'],
           );
         } else {
           debugPrint('Data key not found in the response.');
         }
       } else {
-        debugPrint('Error: ${response.statusCode}, ${response.reasonPhrase}, ${response.body}');
+        // Handle unsuccessful response
+        debugPrint(
+            'Error: ${response.statusCode}, ${response.reasonPhrase}, ${response.body}');
         throw ApiError(
           statusCode: response.statusCode,
           message: "Failed to authenticate",
@@ -69,6 +74,7 @@ class AuthController {
         );
       }
     } catch (error) {
+      // Handle any errors that occur during the API call
       debugPrint('Error: $error');
       ApiErrorHandler.showErrorToast(context, error);
     }
@@ -76,53 +82,75 @@ class AuthController {
     return null;
   }
 
-  // Future<User?> signUp(BuildContext context, payload) async {
-  //   try {
-  //     debugPrint(payload.toString());
+  
 
-  //     // Make the POST request
-  //     var response = await http.post(
-  //       Uri.parse('$baseUrl/auth/signup'),
-  //       body: json.encode(payload),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
+  /// Initiates the Google Sign-In process and returns the user's credentials.
+  ///
+  /// If the Google Sign-In is successful, a [UserCredential] is returned; otherwise, returns `null`.
+  Future<UserCredential?> signInGoogleCredentials() async {
+    try {
+      // Start the Google Sign-In process
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-  //     debugPrint('Response: ${response.body}');
+      if (googleAuth != null) {
+        // Create and return a credential using the obtained Google authentication details
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
-  //     // Check if the response has a successful status code
-  //     if (response.statusCode == 200) {
-  //       var res = json.decode(response.body);
+        return FirebaseAuth.instance.signInWithCredential(credential);
+      }
+    } catch (e) {
+      // Log any errors that occur during Google Sign-In
+      debugPrint('Google sign-in failed: $e');
+    }
+    return null;
+  }
 
-  //       // Check if the user key exists in the response
-  //       if (res.containsKey('body')) {
-  //         Map<String, dynamic> userData = res['body'];
+  /// Handles the full Google Sign-In flow, including Firebase authentication and server-side processing.
+  ///
+  /// The [context] is used for displaying success or error messages via [ScaffoldMessenger].
+  /// Returns a [UserData] object if the sign-in and server-side processing are successful, otherwise returns `null`.
+  Future<UserData?> signInWithGoogle(BuildContext context) async {
+    try {
+      // Sign in the user with Google and obtain credentials
+      final UserCredential? userCredential = await signInGoogleCredentials();
+      final String? idToken = await userCredential?.user?.getIdToken();
 
-  //         // Access user data
-  //         User user = User(
-  //           message: res['message'],
-  //           user: UserClass.fromJson(userData),
-  //         );
+      if (idToken != null) {
+        // Prepare the payload for the server-side API request
+        final Map<String, String> payload = {
+          "provider": "google",
+          "providerToken": idToken,
+        };
+        debugPrint('Payload: $payload');
 
-  //         debugPrint('User Registered: ${user.user?.token}');
-  //         return user;
-  //       } else {
-  //         debugPrint('User key not found in the response.');
-  //       }
-  //     } else {
-  //       debugPrint(
-  //           'Error: ${response.statusCode}, ${response.reasonPhrase}, $response');
-  //       throw ApiError(
-  //         statusCode: response.statusCode,
-  //         message: "Failed to fetch data",
-  //         details: response.body,
-  //       );
-  //     }
-  //   } catch (error) {
-  //       ApiErrorHandler.showErrorToast(context, error);
-  //     debugPrint('Error: $error');
-  //   }
-  //   return null;
-  // }
+        // Make the POST request to the server to complete the sign-in process
+        final response = await client.post(
+          Uri.parse('$baseUrl/auth/fb/signup'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(payload),
+        );
+
+        // Handle server response and display appropriate feedback
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Sign-in successful!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign-in failed: ${response.body}')),
+          );
+        }
+      }
+    } catch (e) {
+      // Handle any errors that occur during the Google sign-in or server-side processing
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+    return null;
+  }
 }
