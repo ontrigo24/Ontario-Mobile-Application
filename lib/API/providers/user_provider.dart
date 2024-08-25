@@ -11,7 +11,8 @@ class UserProvider extends ChangeNotifier {
 
   final AuthController _authController = AuthController();
 
-  Future<UserClass?> signIn(BuildContext context, Map<String, dynamic> payload) async {
+  Future<UserClass?> signIn(
+      BuildContext context, Map<String, dynamic> payload) async {
     try {
       final response = await _authController.signIn(context, payload);
 
@@ -29,7 +30,8 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<UserClass?> signUp(BuildContext context, Map<String, dynamic> payload) async {
+  Future<UserClass?> signUp(
+      BuildContext context, Map<String, dynamic> payload) async {
     try {
       final response = await _authController.signUp(context, payload);
 
@@ -67,6 +69,34 @@ class UserProvider extends ChangeNotifier {
       throw ApiError(
         statusCode: 500,
         message: "An error occurred during the OTP request",
+        details: e.toString(),
+      );
+    }
+  }
+
+  Future<dynamic> forgotPassword(
+      BuildContext context, Map<String, String> payload) async {
+    try {
+      final response = await _authController.forgotPassword(payload);
+
+      // Handle successful response
+      if (response['statusCode'] == 200) {
+        _userData?.statusCode = response['statusCode'];
+        notifyListeners();
+        return response;
+      } else {
+        debugPrint('Failed to reset Password: ${response['statusCode']}');
+        throw ApiError(
+          statusCode: response['statusCode'],
+          message: "Failed to reset Password",
+          details: response.toString(),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error Resetting Password: $e');
+      throw ApiError(
+        statusCode: 500,
+        message: "An error occurred during Password reset",
         details: e.toString(),
       );
     }

@@ -286,4 +286,76 @@ class AuthController {
       );
     }
   }
+
+  Future<Map<String, dynamic>> forgotPassword(
+      Map<String, String> payload) async {
+    debugPrint('Resetting Password: $payload');
+    final String requestBody = json.encode(payload);
+
+    try {
+      // Make the POST request to the forgot password endpoint
+      final response = await client.post(
+        Uri.parse('$baseUrl/auth/forgotPassword'),
+        body: requestBody,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      debugPrint('Response Status Code: ${response.statusCode}');
+      debugPrint('Response Body: ${response.body}');
+
+      // Follow redirect if HTTP 308 status is returned
+      if (response.statusCode == 308) {
+        final redirectUrl = response.headers['location'];
+        if (redirectUrl != null) {
+          debugPrint('Redirecting to: $redirectUrl');
+          // Make a follow-up request to the redirect URL
+          final redirectResponse = await client.post(
+            Uri.parse(redirectUrl),
+            body: requestBody,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          );
+
+          if (redirectResponse.statusCode == 200) {
+            final responseData = json.decode(redirectResponse.body);
+            return responseData;
+          } else {
+            debugPrint(
+                'Error on redirect: ${redirectResponse.statusCode}, ${redirectResponse.reasonPhrase}, ${redirectResponse.body}');
+            throw ApiError(
+              statusCode: redirectResponse.statusCode,
+              message: "Failed to authenticate after redirect",
+              details: redirectResponse.body,
+            );
+          }
+        }
+      }
+
+      // Process a successful response
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        // Handle unsuccessful response
+        debugPrint(
+            'Error: ${response.statusCode}, ${response.reasonPhrase}, ${response.body}');
+        throw ApiError(
+          statusCode: response.statusCode,
+          message: "Failed to authenticate",
+          details: response.body,
+        );
+      }
+    } catch (error) {
+      // Handle any errors that occur during the API call
+      debugPrint('Error: $error');
+      throw ApiError(
+        statusCode: 500,
+        message: "An error occurred during the request",
+        details: error.toString(),
+      );
+    }
+  }
 }
