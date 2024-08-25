@@ -12,6 +12,7 @@ class CustomOnboardingTextField extends StatelessWidget {
     required this.controller,
     this.obscureText = false,
     this.isEnabled = true,
+    this.validator, this.onTap,
   });
 
   final String labelText;
@@ -20,6 +21,9 @@ class CustomOnboardingTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
   final bool isEnabled;
+
+  final FormFieldValidator<String>? validator;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +50,14 @@ class CustomOnboardingTextField extends StatelessWidget {
               labelText: labelText,
               suffixIcon: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: SvgPicture.asset(
-                  sufixSvgIconPath,
-                  color: isEnabled
-                      ? null
-                      : GlobalVariables.colors.textPrimary.withOpacity(0.28),
+                child: InkWell(
+                  onTap: onTap,
+                  child: SvgPicture.asset(
+                    sufixSvgIconPath,
+                    color: isEnabled
+                        ? null
+                        : GlobalVariables.colors.textPrimary.withOpacity(0.28),
+                  ),
                 ),
               ),
               enabledBorder: const OutlineInputBorder(
@@ -62,7 +69,17 @@ class CustomOnboardingTextField extends StatelessWidget {
               disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
               ),
+              errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              errorStyle: const TextStyle(
+                height: 0,
+              ),
             ),
+            validator: validator,
           ),
         ),
       ),

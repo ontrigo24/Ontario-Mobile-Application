@@ -4,38 +4,41 @@ import 'package:ontrigo/screens/auth/components/forgot_password.dart';
 import 'package:ontrigo/screens/auth/components/sign_up.dart';
 import 'package:ontrigo/utils/global_variables.dart';
 import 'package:ontrigo/utils/screen_size.dart';
-
 import '../../../components/custom_onboarding_text_field.dart';
 import '../../../components/primary_btn.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen(
-      {super.key,
-      required this.emailController,
-      required this.passwordController, required this.onSubmit});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.onSubmit,
+  });
+
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final VoidCallback onSubmit;
+  final Future<void> Function() onSubmit;
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  bool _hidePassword = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: ScreenSizeConfig.screenHeight * 0.15),
+            const Spacer(),
             Image.asset('assets/icons/full_logo.png'),
             const Column(
               children: [
-                Text(
-                  'Welcome!',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8), // Added space between the texts
+                SizedBox(height: 8),
                 Text(
                   'Sign In',
                   style: TextStyle(
@@ -43,8 +46,6 @@ class SignInScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
-                Text('Please fill your credentials'),
               ],
             ),
             const SizedBox(height: 16.0),
@@ -52,7 +53,7 @@ class SignInScreen extends StatelessWidget {
               children: [
                 CustomOnboardingTextField(
                   labelText: 'Email',
-                  controller: emailController,
+                  controller: widget.emailController,
                   sufixSvgIconPath: 'assets/icons/mail.svg',
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(8),
@@ -61,21 +62,27 @@ class SignInScreen extends StatelessWidget {
                     topRight: Radius.circular(24),
                   ),
                 ),
-                const SizedBox(height: 4.0), // Space between text fields
+                const SizedBox(height: 4.0),
                 CustomOnboardingTextField(
                   labelText: 'Password',
-                  controller: passwordController,
-                  obscureText: true,
-                  sufixSvgIconPath: 'assets/icons/Lock.svg',
+                  controller: widget.passwordController,
+                  obscureText: _hidePassword,
+                  sufixSvgIconPath: _hidePassword
+                      ? 'assets/icons/Lock.svg'
+                      : 'assets/icons/unlock.svg',
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
+                  onTap: () {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
                 ),
-                const SizedBox(
-                    height: 16.0), // Space between text fields and RichText
+                const SizedBox(height: 16.0),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenSizeConfig.screenWidth * 0.08),
@@ -122,35 +129,55 @@ class SignInScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
-            PrimaryButton(onPressed: onSubmit, title: 'Sign In'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: ScreenSizeConfig.screenWidth * 0.08,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    width: 0.5,
-                    color: const Color(0xFFA2A2A2),
-                  )),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Text(
-                    'OR',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+            const SizedBox(height: 24.0),
+            PrimaryButton(
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      try {
+                        await widget.onSubmit();
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+              title: _isLoading ? 'Loading...' : 'Sign In',
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: ScreenSizeConfig.screenWidth * 0.08,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                      width: 0.5,
+                      color: const Color(0xFFA2A2A2),
+                    )),
                   ),
-                ),
-                Container(
-                  width: ScreenSizeConfig.screenWidth * 0.08,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    width: 0.5,
-                    color: const Color(0xFFA2A2A2),
-                  )),
-                )
-              ],
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Text(
+                      'OR',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    width: ScreenSizeConfig.screenWidth * 0.08,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                      width: 0.5,
+                      color: const Color(0xFFA2A2A2),
+                    )),
+                  )
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +187,18 @@ class SignInScreen extends StatelessWidget {
                 SvgPicture.asset('assets/icons/Google_icon.svg'),
               ],
             ),
-            SizedBox(height: ScreenSizeConfig.screenHeight * 0.075),
+            SizedBox(height: ScreenSizeConfig.screenHeight * 0.05),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Text(
+                'Copyright 2024 All Rights Reserved',
+                style: TextStyle(
+                  fontSize: ScreenSizeConfig.screenHeight * 0.013,
+                  color: const Color(0xFF545454),
+                ),
+              ),
+            ),
           ],
         ),
       ),

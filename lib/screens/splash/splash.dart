@@ -4,7 +4,6 @@ import 'package:ontrigo/components/primary_btn.dart';
 import 'package:ontrigo/screens/auth/auth_page.dart';
 import 'package:ontrigo/utils/global_variables.dart';
 
-// SplashScreen widget
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
   const SplashScreen({super.key});
@@ -21,10 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _carouselController = AutoCarouselController(
-      itemCount: 3, // Set the number of items in the carousel
+      itemCount: 3,
       interval: const Duration(seconds: 3),
       onPageChanged: (int page) {
-        // Update state to rebuild the progress indicators
         setState(() {});
       },
     );
@@ -32,7 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
     checkAuth();
   }
 
-  // Simulate checking authentication or loading resources
   void checkAuth() {
     Timer(
       const Duration(seconds: 3),
@@ -50,17 +47,17 @@ class _SplashScreenState extends State<SplashScreen> {
       'img': 'assets/images/carousel_1.webp',
       'title': 'Budget-Friendly\nJourneys.',
       'desc': 'Save while you explore.'
-    }, // Change to 0-based index
+    },
     {
       'img': 'assets/images/carousel_2.jpg',
       'title': 'Personalized\nTravel Plans.',
       'desc': 'Tailored to you.'
-    }, // 1-based index
+    },
     {
       'img': 'assets/images/carousel_3.webp',
       'title': 'Effortless\nTrip Planning.',
       'desc': 'Stress-free travel awaits.'
-    }, // 2-based index
+    },
   ];
 
   void handleNextBtn() {
@@ -89,13 +86,12 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 CarouselView(
                   pageController: _carouselController.pageController,
-                  children: [
-                    Stack(
+                  children: carouselData.map((data) {
+                    return Stack(
                       fit: StackFit.expand,
                       children: [
                         Image.asset(
-                          carouselData[0]['img'] ??
-                              'assets/images/carousel_1.webp',
+                          data['img'] ?? 'assets/images/carousel_1.webp',
                           fit: BoxFit.cover,
                         ),
                         Container(
@@ -110,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                (carouselData[0]['title'] ?? 'Default Text')
+                                (data['title'] ?? 'Default Text')
                                     .toUpperCase(),
                                 style: TextStyle(
                                   color: GlobalVariables.colors.textAltPrimary,
@@ -119,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                 ),
                               ),
                               Text(
-                                carouselData[0]['desc'] ?? 'Default Desc',
+                                data['desc'] ?? 'Default Desc',
                                 style: TextStyle(
                                   color: GlobalVariables.colors.textAltPrimary,
                                 ),
@@ -128,94 +124,15 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ),
                       ],
-                    ),
-                    Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.asset(
-                          carouselData[1]['img'] ??
-                              'assets/images/carousel_1.webp',
-                          fit: BoxFit.cover,
-                        ),
-                        Container(
-                          height: size.height,
-                          width: size.width,
-                          color: const Color.fromARGB(54, 0, 0, 0),
-                        ),
-                        Positioned(
-                          bottom: size.height * 0.2,
-                          left: size.width * 0.08,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                (carouselData[1]['title'] ?? 'Default Text')
-                                    .toUpperCase(),
-                                style: TextStyle(
-                                  color: GlobalVariables.colors.textAltPrimary,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                (carouselData[1]['desc'] ?? 'Default Desc'),
-                                style: TextStyle(
-                                  color: GlobalVariables.colors.textAltPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.asset(
-                          carouselData[2]['img'] ??
-                              'assets/images/carousel_1.webp',
-                          fit: BoxFit.cover,
-                        ),
-                        Container(
-                          height: size.height,
-                          width: size.width,
-                          color: const Color.fromARGB(54, 0, 0, 0),
-                        ),
-                        Positioned(
-                          bottom: size.height * 0.2,
-                          left: size.width * 0.08,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                (carouselData[2]['title'] ?? 'Default Text')
-                                    .toUpperCase(),
-                                style: TextStyle(
-                                  color: GlobalVariables.colors.textAltPrimary,
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                (carouselData[2]['desc'] ?? 'Default Desc'),
-                                style: TextStyle(
-                                  color: GlobalVariables.colors.textAltPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
                 Positioned(
                   bottom: size.height * 0.15,
                   left: 0,
                   right: 0,
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.width * 0.08),
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(3, (index) {
@@ -248,39 +165,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: SizedBox(
                     width: size.width,
                     child: PrimaryButton(
-                        title: 'Next',
-                        titleStyle: TextStyle(
-                            color: GlobalVariables.colors.textPrimary),
-                        showBorder: false,
-                        fillColor: GlobalVariables.colors.background,
-                        onPressed: () {
-                          Navigator.pushNamed(context, AuthScreen.routeName);
-                        }),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     GestureDetector(
-                    //       onTap: handleNextBtn,
-                    //       child: Container(
-                    //           padding: EdgeInsets.symmetric(
-                    //               vertical: size.height * 0.018),
-                    //           width: size.width - (size.width * 0.18),
-                    //           height: size.height * 0.06,
-                    //           decoration: BoxDecoration(
-                    //               color: GlobalVariables.colors.background,
-                    //               borderRadius: const BorderRadius.all(
-                    //                   Radius.circular(100))),
-                    //           child: Text(
-                    //             'Next',
-                    //             textAlign: TextAlign.center,
-                    //             style: TextStyle(
-                    //               color: GlobalVariables.colors.textPrimary,
-                    //             ),
-                    //           )),
-                    //     )
-                    //   ],
-                    // ),
+                      title: 'Next',
+                      titleStyle:
+                          TextStyle(color: GlobalVariables.colors.textPrimary),
+                      showBorder: false,
+                      fillColor: GlobalVariables.colors.background,
+                      onPressed: handleNextBtn,
+                    ),
                   ),
                 ),
               ],
@@ -289,7 +180,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-// CarouselView widget to display a list of children in a carousel format
 class CarouselView extends StatelessWidget {
   final List<Widget> children;
   final PageController pageController;
@@ -311,7 +201,6 @@ class CarouselView extends StatelessWidget {
   }
 }
 
-// Separate class for handling the automatic carousel logic
 class AutoCarouselController {
   final PageController pageController;
   final int itemCount;
@@ -325,9 +214,22 @@ class AutoCarouselController {
     required this.itemCount,
     this.interval = const Duration(seconds: 3),
     this.onPageChanged,
-  }) : pageController = PageController(initialPage: 0);
+  }) : pageController = PageController(initialPage: 0) {
+    pageController.addListener(_handlePageChange);
+  }
 
   int get currentPage => _currentPage;
+
+  void _handlePageChange() {
+    int newPage = pageController.page?.round() ?? 0;
+    if (newPage != _currentPage) {
+      _currentPage = newPage;
+      resetTimer();
+      if (onPageChanged != null) {
+        onPageChanged!(_currentPage);
+      }
+    }
+  }
 
   void start() {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
@@ -354,8 +256,15 @@ class AutoCarouselController {
     });
   }
 
+  void resetTimer() {
+    _timer.cancel();
+    progressValue = 0.0;
+    start();
+  }
+
   void dispose() {
     _timer.cancel();
+    pageController.removeListener(_handlePageChange);
     pageController.dispose();
   }
 }

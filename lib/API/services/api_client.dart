@@ -1,8 +1,9 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_print,, non_constant_identifier_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_print,
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +24,7 @@ const PlatformDeployed currentPlatform = PlatformDeployed.vercel;
 // const PlatformDeployed socketPlatform = PlatformDeployed.aws;
 
 // set domains
+// ignore: non_constant_identifier_names
 String API_BASE_URL = domains[currentPlatform]![0];
 // String SOCKET_URL = domains[socketPlatform]![0];
 
