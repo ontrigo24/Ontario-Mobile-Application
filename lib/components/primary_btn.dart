@@ -9,13 +9,15 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     required this.title,
     this.showBorder = true,
-    this.fillColor = Colors.transparent, this.titleStyle,
+    this.fillColor = Colors.transparent,
+    this.titleStyle, this.width,
   });
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String title;
   final bool showBorder;
   final Color fillColor;
   final TextStyle? titleStyle;
+  final double? width;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -29,7 +31,7 @@ class PrimaryButton extends StatelessWidget {
             child: Container(
                 padding: EdgeInsets.symmetric(
                     vertical: ScreenSizeConfig.screenHeight * 0.018),
-                width: ScreenSizeConfig.screenWidth -
+                width: width ?? ScreenSizeConfig.screenWidth -
                     (ScreenSizeConfig.screenWidth * 0.18),
                 height: ScreenSizeConfig.screenHeight * 0.06,
                 decoration: BoxDecoration(
@@ -42,9 +44,10 @@ class PrimaryButton extends StatelessWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: titleStyle ?? TextStyle(
-                    color: GlobalVariables.colors.secondary,
-                  ),
+                  style: titleStyle ??
+                      TextStyle(
+                        color: GlobalVariables.colors.secondary,
+                      ),
                 )),
           )
         ],

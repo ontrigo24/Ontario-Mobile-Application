@@ -29,6 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         break;
       case 'Google':
         var response = await _authController.signInWithGoogle(context);
+        // ignore: avoid_print
         print(response);
         break;
       case 'Facebook':

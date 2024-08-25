@@ -30,29 +30,31 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void handleOnSubmit() {
+  Future<void> handleOnSubmit() async {
     final user = Provider.of<UserProvider>(context, listen: false);
     final payload = {
-      "email": emailController.text,
+      "email": emailController.text.toLowerCase(),
       "password": passwordController.text,
     };
 
-    user.signIn(context, payload).then((_) {
+    try {
+      await user.signIn(context, payload);
+
       if (user.userData?.statusCode == 200) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-            (route) => false, // Remove all previous routes
-          );
-        });
+        if (!mounted) return; // Check if widget is still mounted before navigating
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false, // Remove all previous routes
+        );
       } else {
-        // Handle sign-in failure if necessary
+        // Handle sign-in failure
+        debugPrint('Sign-in failed: Status code is not 200');
       }
-    }).catchError((error) {
+    } catch (error) {
       // Handle any errors that occur during sign-in
       debugPrint('Sign-in failed: $error');
-    });
+    }
   }
 
   @override
@@ -60,7 +62,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return SignInScreen(
       emailController: emailController,
       passwordController: passwordController,
-      onSubmit: handleOnSubmit,
+      onSubmit: handleOnSubmit, // Pass the Future-returning function
     );
   }
 }
