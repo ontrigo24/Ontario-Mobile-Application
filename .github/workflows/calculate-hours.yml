@@ -30,7 +30,7 @@ jobs:
 
       - name: Output Working Hours
         run: |
-          echo "| Metric          | Value   |"
-          echo "|-----------------|---------|"
-          echo "| Number of Lines | ${{ env.total_lines }}     |"
-          echo "| Working Hours | ${{ steps.calculate_hours.outputs.estimated_hours }} Hrs |"
+          echo "| Metric          | Value   "
+          echo "|-----------------|---------"
+          echo "| Number of Lines | ${{ env.total_lines }}     "
+          echo "| Working Hours   | ${{ steps.calculate_hours.outputs.estimated_hours }} Hrs "
