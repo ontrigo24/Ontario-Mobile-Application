@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -113,7 +114,7 @@ class AuthController {
   ///
   /// The [context] is used for displaying success or error messages via [ScaffoldMessenger].
   /// Returns a [UserData] object if the sign-in and server-side processing are successful, otherwise returns `null`.
-  Future<UserData?> signInWithGoogle(BuildContext context) async {
+  Future<UserData?> signUpWithGoogle(BuildContext context) async {
     try {
       // Sign in the user with Google and obtain credentials
       final UserCredential? userCredential = await signInGoogleCredentials();
@@ -285,6 +286,80 @@ class AuthController {
         details: error.toString(),
       );
     }
+  }
+
+  /// Handles Facebook login, obtaining the user's credentials from Facebook
+  /// and signing in with Firebase or your server.
+  Future<UserData?> signUpWithFacebook(BuildContext context) async {
+    try {
+      // Trigger the Facebook authentication flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // Check the status of the login attempt
+      if (loginResult.status == LoginStatus.success) {
+        // Obtain the access token
+        final AccessToken accessToken = loginResult.accessToken!;
+
+        // Convert Facebook credentials to Firebase credentials
+        final OAuthCredential credential = FacebookAuthProvider.credential(accessToken.tokenString);
+
+        // Sign in with Firebase
+        final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+        // Get the ID token for server-side authentication
+        final String? idToken = await userCredential.user?.getIdToken();
+
+        if (idToken != null) {
+          // Prepare the payload for the server-side API request
+          final Map<String, String> payload = {
+            "provider": "facebook",
+            "providerToken": idToken,
+          };
+
+          // Make the POST request to the server to complete the sign-in process
+          final response = await client.post(
+            Uri.parse('$baseUrl/auth/fb/signup'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode(payload),
+          );
+
+          // Handle server response and display appropriate feedback
+          if (response.statusCode == 200) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sign-in successful!')),
+            );
+            final responseData = json.decode(response.body);
+            if (responseData.containsKey('data')) {
+              final Map<String, dynamic> userData = responseData['data'];
+              return UserData(
+                statusCode: responseData['statusCode'],
+                message: responseData['message'],
+                data: UserClass.fromJson(userData),
+                success: responseData['success'],
+              );
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Sign-in failed: ${response.body}')),
+            );
+          }
+        }
+      } else if (loginResult.status == LoginStatus.cancelled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Facebook sign-in cancelled')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Facebook sign-in failed: ${loginResult.message}')),
+        );
+      }
+    } catch (e) {
+      // Handle any errors that occur during the Facebook sign-in
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+    return null;
   }
 
   Future<Map<String, dynamic>> forgotPassword(

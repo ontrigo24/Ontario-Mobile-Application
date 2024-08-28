@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ontrigo/API/controller/auth.controller.dart';
+import 'package:ontrigo/API/services/Manager/dialog_manager.dart';
+import 'package:ontrigo/routes/routes.dart';
 import 'package:ontrigo/screens/auth/components/sign_up_form.dart';
+import 'package:ontrigo/screens/home/home.dart';
 
 import '../../../components/primary_btn.dart';
 import '../../../utils/global_variables.dart';
@@ -28,13 +31,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
             MaterialPageRoute(builder: (_) => const SignUpForm()));
         break;
       case 'Google':
-        var response = await _authController.signInWithGoogle(context);
+        var response = await _authController.signUpWithGoogle(context);
         // ignore: avoid_print
         print(response);
+        if(response?.statusCode == 200){
+          Navigator.pushAndRemoveUntil(
+            // ignore: use_build_context_synchronously
+            context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
+        }
         break;
       case 'Facebook':
-        debugPrint('Facebook is yet to be implemented');
-
+        DialogManager.showSnackbar(
+            context: context, message: 'Facebook triggered');
+        var response = await _authController.signUpWithFacebook(context);
+        debugPrint('Facebook: $response');
+        if(response?.statusCode == 200){
+          Navigator.pushAndRemoveUntil(
+            // ignore: use_build_context_synchronously
+            context, MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false);
+        }
         break;
       default:
         debugPrint('Invalid option selected');

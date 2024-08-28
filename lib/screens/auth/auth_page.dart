@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
       await user.signIn(context, payload);
 
       if (user.userData?.statusCode == 200) {
-        if (!mounted) return; // Check if widget is still mounted before navigating
+        // if (!mounted) return; // Check if widget is still mounted before navigating
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),
