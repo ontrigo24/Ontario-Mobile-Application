@@ -28,5 +28,9 @@ jobs:
           echo "Estimated Hours: $estimated_hours"
           echo "estimated_hours=$estimated_hours" >> $GITHUB_OUTPUT
 
-      - name: Output Estimated Hours
-        run: echo "Total Working Hours on this Project :${{ steps.calculate_hours.outputs.estimated_hours }} Hrs"
+      - name: Output Working Hours
+        run: |
+          echo "| Metric          | Value   |"
+          echo "|-----------------|---------|"
+          echo "| Number of Lines | ${{ env.total_lines }}     |"
+          echo "| Working Hours | ${{ steps.calculate_hours.outputs.estimated_hours }} Hrs |"
