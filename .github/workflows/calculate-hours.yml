@@ -32,5 +32,5 @@ jobs:
         run: |
           echo "| Metric          | Value   "
           echo "|-----------------|---------"
-          echo "| Number of Lines | ${{ env.total_lines }}     "
+          echo "| Number of Lines | ${{ env.total_lines }} Lines of code.    "
           echo "| Working Hours   | ${{ steps.calculate_hours.outputs.estimated_hours }} Hrs "
