@@ -1,0 +1,12 @@
+name: Count Lines of Code
+
+on: [push, pull_request]
+
+jobs:
+  count_loc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Count Lines of Code
+        run: |
+          curl -s https://raw.githubusercontent.com/AlDanial/cloc/master/cloc | perl - --git `pwd`
