@@ -29,4 +29,4 @@ jobs:
           echo "estimated_hours=$estimated_hours" >> $GITHUB_OUTPUT
 
       - name: Output Estimated Hours
-        run: echo "Total Estimated Hours:${{ steps.calculate_hours.outputs.estimated_hours }}"
+        run: echo "Total Working Hours on this Project :${{ steps.calculate_hours.outputs.estimated_hours }} Hrs"
